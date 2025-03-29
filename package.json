@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "A template for building scalable applications using NestJS and Hexagonal Architecture",
   "private": true,
-  "author": "Rebeca Méndez",
+  "author": "Rebeca Méndez Barallobre",
+  "license": "MIT",
   "packageManager": "pnpm@8.15.4",
   "scripts": {
     "build": "turbo build",

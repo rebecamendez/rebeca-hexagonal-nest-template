@@ -1,38 +1,21 @@
-Non-Commercial Open Source License (NCOSL)
+MIT License
 
-Copyright (c) 2024 rebeca-hexagonal-nest-template
+Copyright (c) 2024 Rebeca Méndez Barallobre
 
-This software and associated documentation files (the "Software") are licensed under the Non-Commercial Open Source License (NCOSL).
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-1. Definitions:
-   - "Software" refers to the source code, object code, and documentation
-   - "Commercial Use" means any use of the Software for commercial purposes, including but not limited to:
-     * Use in a business or for-profit organization
-     * Use in a product or service that is sold or offered for sale
-     * Use in any commercial project or venture
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-2. Permissions:
-   - View, modify, and distribute the Software
-   - Use the Software for personal or educational purposes
-   - Create derivative works for non-commercial purposes
-   - Share the Software with others for non-commercial purposes
-
-3. Restrictions:
-   - No commercial use of the Software
-   - No creation of derivative works for commercial purposes
-   - No distribution of the Software for commercial purposes
-   - No use of the Software in any commercial product or service
-
-4. Disclaimer:
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
-
-5. Limitation of Liability:
-   IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY.
-
-6. Termination:
-   This license automatically terminates if you fail to comply with any of its terms and conditions.
-
-7. Contact:
-   For questions about this license, please contact the copyright holders.
-
-By using, copying, modifying, or distributing the Software, you agree to be bound by the terms of this license. 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. 

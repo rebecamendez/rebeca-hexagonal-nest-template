@@ -102,11 +102,12 @@ See our [ADR Index](doc/adr/index.md) for a complete list of architectural decis
 
 ## 📄 License
 
-This project is licensed under the Non-Commercial Open Source License (NCOSL). This means:
+This project is licensed under the MIT License. This means:
 
-- ✅ You can view, modify, and distribute the code
-- ✅ You can use it for personal or educational purposes
-- ❌ You cannot use it for commercial purposes
-- ❌ You cannot create derivative works for commercial use
+- ✅ You can use, modify, and distribute the code
+- ✅ You can use it for commercial purposes
+- ✅ You can create derivative works
+- ✅ You can use it privately
+- ✅ You only need to include the original copyright and license notice
 
 See [LICENSE](LICENSE) for full details.
