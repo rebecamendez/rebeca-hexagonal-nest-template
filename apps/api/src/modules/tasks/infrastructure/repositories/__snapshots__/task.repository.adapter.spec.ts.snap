@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`An task repository when creating a task should create a task 1`] = `
+Task {
+  "description": "description created",
+  "id": 2,
+  "title": "title created",
+}
+`;
+
+exports[`An task repository when getting a task by id should return the task 1`] = `
+Task {
+  "description": "description",
+  "id": 1,
+  "title": "title",
+}
+`;
+
+exports[`An task repository when getting tasks should return all tasks 1`] = `
+[
+  Task {
+    "description": "description",
+    "id": 1,
+    "title": "title",
+  },
+]
+`;
+
+exports[`An task repository when updating a task should update a task 1`] = `
+Task {
+  "description": "description updated",
+  "id": 1,
+  "title": "title updated",
+}
+`;

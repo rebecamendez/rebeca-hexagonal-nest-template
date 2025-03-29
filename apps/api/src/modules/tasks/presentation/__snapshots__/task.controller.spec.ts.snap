@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`A Task controller should create a task 1`] = `
+TaskResponse {
+  "description": "Test Description",
+  "id": 1,
+  "title": "Test Task",
+}
+`;
+
+exports[`A Task controller should get a task by id 1`] = `
+TaskResponse {
+  "description": "Test Description",
+  "id": 1,
+  "title": "Test Task",
+}
+`;
+
+exports[`A Task controller should get all tasks 1`] = `
+[
+  TaskResponse {
+    "description": "Test Description",
+    "id": 1,
+    "title": "Test Task",
+  },
+]
+`;
+
+exports[`A Task controller should update a task 1`] = `
+TaskResponse {
+  "description": "Test Description",
+  "id": 1,
+  "title": "Test Task",
+}
+`;

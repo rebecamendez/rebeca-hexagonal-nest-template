@@ -1,0 +1,28 @@
+{
+  "name": "rebeca-hexagonal-nest-template",
+  "version": "0.1.0",
+  "description": "A template for building scalable applications using NestJS and Hexagonal Architecture",
+  "private": true,
+  "author": "Rebeca Méndez",
+  "packageManager": "pnpm@8.15.4",
+  "scripts": {
+    "build": "turbo build",
+    "clean": "turbo run clean && rm -rf node_modules .turbo dist tsconfig.tsbuildinfo",
+    "deps:audit": "pnpm audit --audit-level=high && echo 'No critical vulnerabilities found'",
+    "deps:update": "pnpm update --latest --recursive",
+    "dev": "turbo dev",
+    "docker:init": "cp docker-compose.yml.example docker-compose.yml",
+    "docker:start": "docker compose up -d",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo lint",
+    "test": "turbo run test",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@rebeca-hexagonal-nest-template/lint-config": "workspace:*",
+    "husky": "9.0.11",
+    "lint-staged": "15.5.0",
+    "prettier": "3.2.5",
+    "turbo": "2.4.4"
+  }
+}

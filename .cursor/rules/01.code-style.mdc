@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Your rule content
+
+## 1. Code Standards
+- English ONLY everywhere
+- Self-documenting code, no comments
+- Strict TypeScript + ESLint
+- Simple, concise solutions always
+
+## 2. Development
+- Monorepo (Turborepo + pnpm)
+- Fixed dependencies
+- Smart logging:
+  - Meaningful context
+  - Emojis foity
+- ADRs in `doc/adr/`:
+  - Index in [index.d.ts](mdc:📝 api-contract/dist/cjs/index.d.ts)
+  - Use [template.md] [template.md](mdc:✨ rebeca-hexagonal-nest-template (root)/doc/adr/template.md) template
+
+## 3. Best Practices
+- Keep it simple, avoid complexity
+- Use emojis in responses
+- Clear, friendly communication 😊
+
+## 4. Path Rules
+- Use `@rebeca-hexagonal-nest-template/*` for internal packages
+- No relative paths between packages
+- Follow package structure:
+  ```
+  packages/
+    ├── api-contract/     # API contracts
+    └── lint-config/     # Linting rules
+  apps/
+    └── api/            # Backend API
+  ```
+- Import order:
+  1. Internal packages (`@rebeca-hexagonal-nest-template/*`)
+  2. External packages
+  3. Relative imports

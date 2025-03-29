@@ -1,0 +1,27 @@
+{
+  "folders": [
+    {
+      "name": "✨ rebeca-hexagonal-nest-template (root)",
+      "path": "./"
+    },
+    // -- apps 🚀
+    {
+      "name": "💾 api",
+      "path": "./apps/api"
+    },
+    // -- packages 📦
+    {
+      "name": "📝 api-contract",
+      "path": "./packages/api-contract"
+    }
+  ],
+  "settings": {
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll.eslint": "explicit"
+    }
+  }
+}

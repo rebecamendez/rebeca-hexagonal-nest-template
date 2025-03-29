@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Task Endpoints (e2e) when retrieving tasks should return a list of tasks 1`] = `
+[
+  {
+    "description": "description",
+    "id": 1,
+    "title": "title",
+  },
+]
+`;

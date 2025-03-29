@@ -1,0 +1,87 @@
+name: 'Cache: Main'
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    steps:
+      # 🔧 Setup
+      - uses: actions/checkout@v4
+
+      - name: Read versions
+        id: versions
+        run: |
+          echo "node_version=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+          echo "pnpm_version=$(cat package.json | jq -r '.packageManager | split("@")[1]')" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.versions.outputs.node_version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ steps.versions.outputs.pnpm_version }}
+          run_install: false
+
+      # 📦 Dependencies & Cache
+      - name: Cache dependencies
+        id: cache-deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            /home/runner/setup-pnpm/node_modules/.bin/store/v10
+            .pnpm
+            node_modules
+            .turbo
+            node_modules/.cache/turbo
+          key: ${{ runner.os }}-main-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-main-cache-
+
+      - name: Install dependencies
+        run: |
+          echo "Installing with pnpm $(pnpm -v)..."
+          if [ "${{ steps.cache-deps.outputs.cache-hit }}" == 'true' ]; then
+            if pnpm install --offline; then
+              echo "✅ Installed dependencies from cache."
+            else
+              echo "⚠️ Cache was incomplete or outdated. Running full install..."
+              HUSKY=0 pnpm install --frozen-lockfile --strict-peer-dependencies --ignore-scripts
+            fi
+          else
+            echo "🔄 Cache key mismatch. Running full install..."
+            HUSKY=0 pnpm install --frozen-lockfile --strict-peer-dependencies --ignore-scripts
+          fi
+
+      # 📊 Diagnostics
+      - name: Show versions
+        run: |
+          echo "=== Versions ==="
+          echo "📗 Node.js: $(node -v)"
+          echo "📦 pnpm: $(pnpm -v)"
+          echo "🔄 turbo: $(npx turbo --version)"
+
+      - name: List cache sizes
+        run: |
+          echo "=== Cache Sizes ==="
+          echo "📦 pnpm store:"
+          du -sh /home/runner/setup-pnpm/node_modules/.bin/store/v10 2>/dev/null || true
+          echo "📦 pnpm local:"
+          du -sh .pnpm 2>/dev/null || true
+          echo "📂 node_modules:"
+          du -sh node_modules 2>/dev/null || true
+          echo "⚡ turbo cache:"
+          du -sh .turbo 2>/dev/null || true
+          echo "🔄 turbo node cache:"
+          du -sh node_modules/.cache/turbo 2>/dev/null || true

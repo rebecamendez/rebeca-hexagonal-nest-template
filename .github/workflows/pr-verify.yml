@@ -1,0 +1,89 @@
+name: 'PR: Verify'
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      # 🔧 Setup
+      - uses: actions/checkout@v4
+
+      - name: Read versions
+        id: versions
+        run: |
+          echo "node_version=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+          echo "pnpm_version=$(cat package.json | jq -r '.packageManager | split("@")[1]')" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.versions.outputs.node_version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ steps.versions.outputs.pnpm_version }}
+          run_install: false
+
+      # 📦 Dependencies & Cache
+      - name: Restore main cache
+        id: cache-deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            /home/runner/setup-pnpm/node_modules/.bin/store/v10
+            .pnpm
+            node_modules
+            .turbo
+            node_modules/.cache/turbo
+          key: ${{ runner.os }}-main-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-main-cache-
+
+      - name: Install dependencies
+        run: |
+          echo "Installing with pnpm $(pnpm -v)..."
+          if [ "${{ steps.cache-deps.outputs.cache-hit }}" == 'true' ]; then
+            if pnpm install --offline; then
+              echo "✅ Installed dependencies from cache."
+            else
+              echo "⚠️ Cache was incomplete or outdated. Running full install..."
+              HUSKY=0 pnpm install --frozen-lockfile --strict-peer-dependencies --ignore-scripts
+            fi
+          else
+            echo "🔄 Cache key mismatch. Running full install..."
+            HUSKY=0 pnpm install --frozen-lockfile --strict-peer-dependencies --ignore-scripts
+          fi
+
+      # ✅ Checks: cross-cutting
+      - name: Check Node.js version
+        run: node scripts/check-node-version.js
+
+      - name: Check package.json fixed versions
+        run: node scripts/check-fixed-versions.js
+
+      - name: Check package.json versions audit
+        run: pnpm audit --audit-level=high
+
+      # ✅ Checks: packages
+
+      - name: Lint
+        run: pnpm turbo run lint
+
+      - name: Build
+        run: pnpm turbo run build
+
+      - name: Test
+        run: pnpm turbo run test

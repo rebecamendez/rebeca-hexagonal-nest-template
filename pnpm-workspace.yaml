@@ -1,0 +1,10 @@
+packages:
+  - packages/*
+  - apps/*
+  - '!**/test/**'
+  - '!**/dist/**'
+  - '!**/node_modules/**'
+  - '!**/.turbo/**'
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@scarf/scarf'
