@@ -11,6 +11,7 @@
     "clean": "turbo run clean && rm -rf node_modules .turbo dist tsconfig.tsbuildinfo",
     "deps:audit": "pnpm audit --audit-level=high && echo 'No critical vulnerabilities found'",
     "deps:update": "pnpm update --latest --recursive",
+    "dev:init": "turbo dev:init --filter=api",
     "dev": "turbo dev",
     "docker:init": "cp docker-compose.yml.example docker-compose.yml",
     "docker:start": "docker compose up -d",

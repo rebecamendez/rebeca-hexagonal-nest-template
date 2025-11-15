@@ -1,0 +1,22 @@
+meta {
+  name: Update Task
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/tasks/{{taskId}}
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "Updated Task",
+    "description": "Updated Description"
+  }
+}

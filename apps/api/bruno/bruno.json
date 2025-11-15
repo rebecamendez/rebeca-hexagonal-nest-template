@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "rebeca-hexagonal-nest-template API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

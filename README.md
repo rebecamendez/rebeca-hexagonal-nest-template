@@ -28,13 +28,15 @@ This template provides a foundation for building applications with:
 
 ## 🚀 Quick Start
 
+From root repository folder
+
 1. Install dependencies:
 ```bash
 nvm use  # Uses version from .nvmrc
 pnpm install
 ```
 
-## 🐳 Docker Setup
+### 🐳 Docker Setup
 
 1. Initialize Docker environment:
 ```bash
@@ -45,6 +47,21 @@ pnpm docker:init  # Copies docker-compose.yml.example to docker-compose.yml
 ```bash
 pnpm docker:start
 ```
+
+### 🔧 API Setup
+
+1. Initialize development environment:
+```bash
+pnpm dev:init  # Creates .env file and runs database migrations
+```
+
+2. Start development server:
+```bash
+pnpm dev
+```
+
+📚 API documentation available at http://localhost:3000/api/  
+📁 Bruno collection available in `apps/api/bruno/`
 
 ## 📚 Documentation
 
