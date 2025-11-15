@@ -33,6 +33,7 @@ From root repository folder
 1. Install dependencies:
 ```bash
 nvm use  # Uses version from .nvmrc
+npm install -g pnpm  # Install pnpm globally if not already installed
 pnpm install
 ```
 

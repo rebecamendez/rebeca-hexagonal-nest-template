@@ -22,9 +22,9 @@
   },
   "devDependencies": {
     "@rebeca-hexagonal-nest-template/lint-config": "workspace:*",
-    "husky": "9.0.11",
-    "lint-staged": "15.5.0",
-    "prettier": "3.2.5",
-    "turbo": "2.4.4"
+    "husky": "9.1.7",
+    "lint-staged": "16.2.6",
+    "prettier": "3.6.2",
+    "turbo": "2.6.1"
   }
 }
