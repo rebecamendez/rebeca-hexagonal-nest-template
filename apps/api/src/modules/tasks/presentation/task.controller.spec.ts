@@ -1,22 +1,36 @@
 import { createTaskRequestMock } from '@rebeca-hexagonal-nest-template/api-contract';
 import { mock, mockReset } from 'jest-mock-extended';
 
-import { TaskService } from '../application/task.service';
+import { CreateTaskCommand } from '../application/commands/create-task.command';
+import { UpdateTaskCommand } from '../application/commands/update-task.command';
+import { CreateTaskUseCase } from '../application/use-cases/create-task.use-case';
+import { DeleteTaskUseCase } from '../application/use-cases/delete-task.use-case';
+import { GetTaskUseCase } from '../application/use-cases/get-task.use-case';
+import { GetTasksUseCase } from '../application/use-cases/get-tasks.use-case';
+import { UpdateTaskUseCase } from '../application/use-cases/update-task.use-case';
 import { createTaskMock } from '../domain/task.mock';
 import { TaskController } from './task.controller';
 
 describe('A Task controller', () => {
-  const service = mock<TaskService>();
-  const controller = new TaskController(service);
+  const getTasksUseCase = mock<GetTasksUseCase>();
+  const getTaskUseCase = mock<GetTaskUseCase>();
+  const createTaskUseCase = mock<CreateTaskUseCase>();
+  const updateTaskUseCase = mock<UpdateTaskUseCase>();
+  const deleteTaskUseCase = mock<DeleteTaskUseCase>();
+  const controller = new TaskController(getTasksUseCase, getTaskUseCase, createTaskUseCase, updateTaskUseCase, deleteTaskUseCase);
 
   beforeEach(() => {
-    mockReset(service);
+    mockReset(getTasksUseCase);
+    mockReset(getTaskUseCase);
+    mockReset(createTaskUseCase);
+    mockReset(updateTaskUseCase);
+    mockReset(deleteTaskUseCase);
   });
 
   it('should get all tasks', async () => {
     const tasks = [createTaskMock()];
 
-    service.getTasks.calledWith().mockResolvedValue(tasks);
+    getTasksUseCase.execute.calledWith().mockResolvedValue(tasks);
 
     const result = await controller.getTasks();
     expect(result).toMatchSnapshot();
@@ -25,7 +39,7 @@ describe('A Task controller', () => {
   it('should get a task by id', async () => {
     const task = createTaskMock();
 
-    service.getTask.calledWith(task.id).mockResolvedValue(task);
+    getTaskUseCase.execute.calledWith(task.id).mockResolvedValue(task);
 
     const result = await controller.getTask(task.id);
     expect(result).toMatchSnapshot();
@@ -35,7 +49,7 @@ describe('A Task controller', () => {
     const request = createTaskRequestMock();
     const task = createTaskMock();
 
-    service.createTask.calledWith(request.title, request.description).mockResolvedValue(task);
+    createTaskUseCase.execute.calledWith(new CreateTaskCommand(request.title, request.description)).mockResolvedValue(task);
 
     const result = await controller.createTask(request);
     expect(result).toMatchSnapshot();
@@ -45,7 +59,9 @@ describe('A Task controller', () => {
     const request = createTaskRequestMock();
     const task = createTaskMock();
 
-    service.updateTask.calledWith(task.id, request.title, request.description).mockResolvedValue(task);
+    updateTaskUseCase.execute
+      .calledWith(new UpdateTaskCommand(task.id, request.title, request.description))
+      .mockResolvedValue(task);
 
     const result = await controller.updateTask(task.id, request);
     expect(result).toMatchSnapshot();
@@ -55,6 +71,6 @@ describe('A Task controller', () => {
     const task = createTaskMock();
 
     await controller.deleteTask(task.id);
-    expect(service.deleteTask).toHaveBeenCalledWith(task.id);
+    expect(deleteTaskUseCase.execute).toHaveBeenCalledWith(task.id);
   });
 });
