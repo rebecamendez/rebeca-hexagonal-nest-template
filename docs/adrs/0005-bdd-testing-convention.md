@@ -49,8 +49,13 @@ Every test asserts behavior, not implementation: it goes through the public entr
 
 The convention is recorded as a repo rule in [aip-repo-testing-bdd](../rules/aip-repo-testing-bdd.md) and this ADR.
 
+### Why Not Full Gherkin BDD
+
+This is BDD-inspired naming, not full BDD with Gherkin. We deliberately do not use `.feature` files plus step-definition files — not even for e2e scenarios — because every scenario would then require two files to develop and keep in sync: the feature file with the `Given/When/Then` steps and the step definitions that bind them. For a simple CRUD template that ceremony outweighs the readability gain. The naming convention produces the same "given X, when Y, should Z" sentence with a single spec file per unit, living right next to the code it tests.
+
 ### Alternatives Rejected
 
+- **Full Gherkin BDD (Cucumber-style `.feature` files + step definitions):** each scenario would need two files to develop and keep in sync, which is too much ceremony for a simple CRUD template and makes e2e scenarios heavier to maintain; the naming convention delivers the same readability with one file per unit.
 - **jest-bdd / gherkin-style helpers:** adds a dependency and a larger migration for the same readability gain; the naming convention alone is enough.
 - **Bare top-level `it` blocks:** readable for single-behavior units, but inconsistent once a unit has several scenarios.
 
@@ -73,6 +78,7 @@ The convention is recorded as a repo rule in [aip-repo-testing-bdd](../rules/aip
 
 - Renaming tests invalidates existing snapshots (one-time churn).
 - Two nested `describe` blocks add nesting to small specs; accepted for consistency.
+- Scenarios are not executable by a Gherkin runner and cannot be shared with non-technical stakeholders as a formal spec; the readability they lose is small for this template.
 
 ## References
 
