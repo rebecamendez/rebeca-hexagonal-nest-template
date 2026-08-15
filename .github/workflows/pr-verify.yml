@@ -88,3 +88,11 @@ jobs:
 
       - name: Test
         run: pnpm turbo run test
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: test-reports
+          path: apps/api/coverage
+          retention-days: 7
