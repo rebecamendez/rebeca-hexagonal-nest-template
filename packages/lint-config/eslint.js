@@ -1,7 +1,7 @@
 const typescript = require('@typescript-eslint/eslint-plugin');
 const tsParser = require('@typescript-eslint/parser');
 const checkFile = require('eslint-plugin-check-file');
-const importPlugin = require('eslint-plugin-import');
+const importPlugin = require('eslint-plugin-import-x');
 const prettier = require('eslint-plugin-prettier');
 const unusedImports = require('eslint-plugin-unused-imports');
 
