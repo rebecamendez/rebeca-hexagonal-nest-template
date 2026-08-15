@@ -6,7 +6,7 @@ The testing strategy is a direct consequence of the [simple hexagonal architectu
 
 | Layer | Test type | What it mocks | Tooling |
 |---|---|---|---|
-| Presentation | Unit | Services | Jest |
+| Presentation | Unit | Use cases | Jest |
 | Application | Unit | Repository ports | Jest |
 | Infrastructure | Repository tests | Real database | Jest + TestContainers |
 | Full stack | E2E (optional) | Real stack | Jest + TestContainers |
@@ -47,50 +47,57 @@ const task = createTaskMock({ title: 'Custom Title' });
 await new TaskEntityBuilder().mock({ title: 'Custom Title' }).save(dataSource);
 ```
 
-## Case 1: Unit Test for the Application Service
+## Case 1: Unit Test for a Use Case
 
-The service depends only on the port, so the spec mocks the port with `jest-mock-extended`. No database is involved. This test proves orchestration: the service forwards the call and returns the domain result.
+A use case depends only on the port, so the spec mocks the port with `jest-mock-extended`. No database is involved. This test proves orchestration: the use case forwards the call and returns the domain result.
 
 ```typescript
-// apps/api/src/modules/tasks/application/task.service.spec.ts
+// apps/api/src/modules/tasks/application/use-cases/create-task.use-case.spec.ts
 const repository = mock<TaskRepository>();
-const service = new TaskService(repository);
+const useCase = new CreateTaskUseCase(repository);
 
 it('should create a task', async () => {
   const task = createTaskMock();
+  const command = new CreateTaskCommand(task.title, task.description);
 
   repository.createTask.calledWith(task.title, task.description).mockResolvedValue(task);
 
-  const result = await service.createTask(task.title, task.description);
+  const result = await useCase.execute(command);
 
   expect(result).toEqual(task);
 });
-
-it('should remove a task', async () => {
-  const task = createTaskMock();
-
-  await service.deleteTask(task.id);
-
-  expect(repository.deleteTask).toHaveBeenCalledWith(task.id);
-});
 ```
 
-Note the two assertions styles: mock the return value and compare the result, or verify the mock was called with the right arguments. `mockReset(repository)` runs before each test to keep scenarios isolated.
+Read operations pass their arguments directly, so the spec asserts on the id:
+
+```typescript
+// apps/api/src/modules/tasks/application/use-cases/get-task.use-case.spec.ts
+const task = createTaskMock();
+
+repository.getTask.calledWith(task.id).mockResolvedValue(task);
+
+const result = await useCase.execute(task.id);
+
+expect(result).toEqual(task);
+```
+
+Note the two assertion styles: mock the return value and compare the result, or verify the mock was called with the right arguments. `mockReset(repository)` runs before each test to keep scenarios isolated.
 
 ## Case 2: Unit Test for the Controller
 
-The controller mocks the service and asserts the HTTP contract through snapshots. The mapper runs for real, so the snapshot captures the exact response shape a consumer sees.
+The controller mocks the use cases and asserts the HTTP contract through snapshots. The mapper runs for real, so the snapshot captures the exact response shape a consumer sees.
 
 ```typescript
 // apps/api/src/modules/tasks/presentation/task.controller.spec.ts
-const service = mock<TaskService>();
-const controller = new TaskController(service);
+const getTasksUseCase = mock<GetTasksUseCase>();
+const createTaskUseCase = mock<CreateTaskUseCase>();
+const controller = new TaskController(getTasksUseCase, createTaskUseCase);
 
 it('should create a task', async () => {
   const request = createTaskRequestMock();
   const task = createTaskMock();
 
-  service.createTask.calledWith(request.title, request.description).mockResolvedValue(task);
+  createTaskUseCase.execute.calledWith(new CreateTaskCommand(request.title, request.description)).mockResolvedValue(task);
 
   const result = await controller.createTask(request);
   expect(result).toMatchSnapshot();

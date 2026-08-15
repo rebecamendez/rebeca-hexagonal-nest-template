@@ -9,8 +9,8 @@ Hexagonal architecture only pays off if each layer is tested against the layer b
 ## Rules
 
 - [MUST] write unit tests for every layer; each layer mocks the layer below it. { aip-repo-testing.unit }
-  - Presentation (controllers) mocks services.
-  - Application (services) mocks repository ports.
+  - Presentation (controllers) mocks use cases.
+  - Application (use cases) mocks repository ports.
 - [MUST] test every repository adapter against a real database with TestContainers. { aip-repo-testing.repository }
 - [MUST] create test data with entity builders located in `src/modules/shared/database/tests/`. { aip-repo-testing.builders }
 - [SHOULD] write end-to-end tests for critical user flows; do not duplicate unit test coverage. { aip-repo-testing.e2e }

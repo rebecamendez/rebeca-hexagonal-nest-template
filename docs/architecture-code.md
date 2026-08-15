@@ -40,25 +40,25 @@ flowchart TB
     Domain["Domain: entities and business rules, no frameworks"]
   end
 
-  subgraph App["Application: ports"]
-    Service["TaskService (primary port)"]
+  subgraph App["Application: ports and use cases"]
+    UseCases["Use cases (primary ports)"]
     Repo["TaskRepository (secondary port)"]
   end
 
   Http["Presentation (primary adapter): controller + mapper (HTTP)"]
   Infra["Infrastructure (secondary adapter): repository (TypeORM/PostgreSQL)"]
 
-  Http -->|calls| Service
-  Service -->|depends on| Repo
+  Http -->|calls| UseCases
+  UseCases -->|depends on| Repo
   Repo -->|implemented by| Infra
 
-  Domain <--> Service
+  Domain <--> UseCases
   Domain <--> Repo
 ```
 
 Two kinds of ports show up in the code:
 
-- **Primary ports** drive the application: services such as `TaskService`, called by the presentation.
+- **Primary ports** drive the application: use cases such as `CreateTaskUseCase`, called by the presentation.
 - **Secondary ports** are what the application needs from outside: interfaces such as `TaskRepository`, implemented by adapters.
 
 In this codebase the four layers map directly onto that model: `domain` is the hexagon core, `application` holds the ports and the orchestration, and `infrastructure` (persistence) and `presentation` (HTTP) are the adapters. Because the core only knows interfaces, swapping PostgreSQL for another database, or adding a CLI client, never touches the domain or the application logic. That dependency inversion is also what makes the architecture testable: tests mock the ports instead of the infrastructure.
@@ -70,7 +70,7 @@ A request crosses every layer exactly once, and each layer maps its own concern:
 ```mermaid
 flowchart LR
   Http["HTTP request"] --> Pres["Presentation (controller validates + maps)"]
-  Pres --> App["Application (service orchestrates through a port)"]
+  Pres --> App["Application (use case orchestrates through a port)"]
   App --> Infra["Infrastructure (adapter talks to PostgreSQL)"]
   Infra -->|"back through the port"| Pres
   Pres -->|"mapper builds the response DTO"| Resp["HTTP response"]
@@ -147,25 +147,47 @@ export interface TaskRepository {
 }
 ```
 
-## Case 4: The Application Service
+## Case 4: The Application Use Cases
 
-The service orchestrates the use-cases and only depends on the port. It holds no database or HTTP knowledge.
+Each operation is a use case: a class that orchestrates the port for a single responsibility and exposes one `execute()` method. It holds no database or HTTP knowledge. The write operations receive an immutable command object.
 
 ```typescript
-// apps/api/src/modules/tasks/application/task.service.ts
+// apps/api/src/modules/tasks/application/commands/create-task.command.ts
+export class CreateTaskCommand {
+  public constructor(
+    public readonly title: string,
+    public readonly description: string
+  ) {}
+}
+```
+
+```typescript
+// apps/api/src/modules/tasks/application/use-cases/create-task.use-case.ts
 @Injectable()
-export class TaskService {
+export class CreateTaskUseCase {
   public constructor(@Inject(TASK_REPOSITORY) private readonly taskRepository: TaskRepository) {}
 
-  public async createTask(title: string, description: string): Promise<Task> {
-    return this.taskRepository.createTask(title, description);
+  public async execute(command: CreateTaskCommand): Promise<Task> {
+    return this.taskRepository.createTask(command.title, command.description);
   }
+}
+```
 
-  public async getTasks(): Promise<Task[]> {
+Read operations take their arguments directly:
+
+```typescript
+// apps/api/src/modules/tasks/application/use-cases/get-tasks.use-case.ts
+@Injectable()
+export class GetTasksUseCase {
+  public constructor(@Inject(TASK_REPOSITORY) private readonly taskRepository: TaskRepository) {}
+
+  public async execute(): Promise<Task[]> {
     return this.taskRepository.getTasks();
   }
 }
 ```
+
+The application layer keeps the `TaskRepository` port in `application/ports/`. While the domain is anemic, nothing in the domain needs persistence, so the port stays out of the domain. If the domain grows rich, the interface moves there and the use cases delegate to it. See [ADR-0004](adrs/0004-application-use-cases.md).
 
 ## Case 5: The Infrastructure Adapter
 
@@ -256,12 +278,15 @@ The controller owns the HTTP contract. It validates the incoming body with the g
 @ApiTags('tasks')
 @Controller('tasks')
 export class TaskController {
-  public constructor(private readonly taskService: TaskService) {}
+  public constructor(
+    private readonly getTasksUseCase: GetTasksUseCase,
+    private readonly createTaskUseCase: CreateTaskUseCase
+  ) {}
 
   @Post()
   @ApiBody({ description: '', examples: { example: { value: createTaskRequestMock() } } })
   public async createTask(@Body() request: TaskRequest): Promise<TaskResponse> {
-    const task = await this.taskService.createTask(request.title, request.description);
+    const task = await this.createTaskUseCase.execute(new CreateTaskCommand(request.title, request.description));
     return TaskMapper.toResponse(task);
   }
 }
@@ -298,7 +323,7 @@ The module ties the layer together with NestJS dependency injection. This is the
 @Module({
   imports: [DatabaseModule],
   controllers: [TaskController],
-  providers: [TaskService, ...taskRepositoryProviders]
+  providers: [GetTasksUseCase, GetTaskUseCase, CreateTaskUseCase, UpdateTaskUseCase, DeleteTaskUseCase, ...taskRepositoryProviders]
 })
 export class TasksModule {}
 ```
@@ -310,7 +335,7 @@ For every feature, follow the same shape:
 1. Contract DTOs in `api-contract` (request, response, mocks).
 2. Plain domain model with no framework imports.
 3. Port interface in `application/ports`.
-4. Service in `application` that depends only on the port.
+4. One use case per operation in `application/use-cases`, with commands for write inputs, that depends only on the port.
 5. Adapter in `infrastructure` that implements the port and maps entities at the boundary.
 6. Provider that binds the port to the adapter.
 7. Controller and mappers in `presentation` that own the HTTP contract.

@@ -22,7 +22,7 @@ Build a modular monolith with a simple hexagonal architecture.
 ### Hexagonal Layers
 
 - Domain: business entities and rules, free of framework and database concerns.
-- Application: services and ports (interfaces) that orchestrate domain operations.
+- Application: use cases and ports (interfaces) that orchestrate domain operations. See [ADR-0004](0004-application-use-cases.md).
 - Infrastructure: adapters that implement the ports, such as the database repository.
 - Presentation: HTTP controllers and mappers.
 - Wire everything through NestJS dependency injection so layers never depend on implementations directly.
@@ -59,11 +59,14 @@ Presentation maps between contract DTOs and domain objects:
 // presentation/task.controller.ts
 @Injectable()
 export class TaskController {
-  public constructor(private readonly taskService: TaskService) {}
+  public constructor(
+    private readonly getTasksUseCase: GetTasksUseCase,
+    private readonly getTaskUseCase: GetTaskUseCase
+  ) {}
 
   @Get()
   public async getTasks(): Promise<TaskResponse[]> {
-    const tasks = await this.taskService.getTasks();
+    const tasks = await this.getTasksUseCase.execute();
     return tasks.map((task) => TaskMapper.toResponse(task));
   }
 }

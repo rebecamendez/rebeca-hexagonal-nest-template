@@ -7,6 +7,7 @@ A decision record captures an important architectural choice: the context, the d
 | 0001 | [REST API Architecture](0001-rest-api-architecture.md) | Accepted |
 | 0002 | [Git Workflow](0002-git-workflow.md) | Accepted |
 | 0003 | [Testing Strategy](0003-testing-strategy.md) | Accepted |
+| 0004 | [Application Use Cases](0004-application-use-cases.md) | Proposed |
 
 ## ADR Process
 
