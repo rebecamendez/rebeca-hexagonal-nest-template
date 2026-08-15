@@ -10,7 +10,7 @@ The NestJS backend. It exposes a REST API for tasks and hosts the shared infrast
 
 ### tasks module
 
-The only feature module, task management with full CRUD. See [tasks.md](modules/tasks.md) for the use-cases, layout, and testing.
+The only feature module, task management with full CRUD. See [tasks.md](modules/tasks.md) for the use-cases and layout.
 
 ## Shared modules
 - `shared/database`: TypeORM data source, entities, and the entity builders used in tests.
