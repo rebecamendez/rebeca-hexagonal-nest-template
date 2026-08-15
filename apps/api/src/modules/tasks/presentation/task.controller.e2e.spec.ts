@@ -1,26 +1,27 @@
 /* eslint-disable no-process-env */
-import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Test, TestingModule } from '@nestjs/testing';
 import { setupNestApp } from 'main.setup';
 import { TaskEntityBuilder } from 'modules/shared/database/tests/task.entity.builder';
 import request from 'supertest';
 import { StartedTestContainer } from 'testcontainers';
 import { containerSetup } from 'tests/test-containers.setup';
 import { DataSource } from 'typeorm';
+
+import { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
+
 import { AppModule } from '../../../app.module';
 
-describe('Task Endpoints (e2e)', () => {
+describe('GET /tasks (e2e)', () => {
   let app: INestApplication;
   let container: StartedTestContainer;
   let dataSource: DataSource;
 
   const prepareScenario = async (dataSource: DataSource): Promise<void> => {
-     await new TaskEntityBuilder().mock().save(dataSource);
+    await new TaskEntityBuilder().mock().save(dataSource);
   };
 
   beforeAll(async () => {
-
     const databaseName = 'task-endpoints-e2e-test';
     ({ container, dataSource } = await containerSetup(databaseName));
 
@@ -60,14 +61,14 @@ describe('Task Endpoints (e2e)', () => {
     if (container) await container.stop();
   });
 
-  describe('when retrieving tasks', () => {
-    it('should return a list of tasks', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/tasks')
-        .send();
+  describe('given tasks exist in the system', () => {
+    describe('when a client requests the task list', () => {
+      it('should return all tasks (200 OK)', async () => {
+        const response = await request(app.getHttpServer()).get('/tasks').send();
 
-      expect(response.status).toBe(200);
-      expect(response.body).toMatchSnapshot();
+        expect(response.status).toBe(200);
+        expect(response.body).toMatchSnapshot();
+      });
     });
   });
 });

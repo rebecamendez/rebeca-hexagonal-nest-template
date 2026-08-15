@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`Task Endpoints (e2e) when retrieving tasks should return a list of tasks 1`] = `
+exports[`GET /tasks (e2e) given tasks exist in the system when a client requests the task list should return all tasks (200 OK) 1`] = `
 [
   {
     "description": "description",

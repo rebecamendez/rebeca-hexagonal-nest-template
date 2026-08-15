@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`A Task controller should create a task 1`] = `
+exports[`Task controller given a task to create when creating a task should create the task (201 Created) 1`] = `
 TaskResponse {
   "description": "Test Description",
   "id": 1,
@@ -8,7 +8,7 @@ TaskResponse {
 }
 `;
 
-exports[`A Task controller should get a task by id 1`] = `
+exports[`Task controller given an existing task when updating a task should update the task (200 OK) 1`] = `
 TaskResponse {
   "description": "Test Description",
   "id": 1,
@@ -16,7 +16,15 @@ TaskResponse {
 }
 `;
 
-exports[`A Task controller should get all tasks 1`] = `
+exports[`Task controller given an existing task when viewing a task should return the task (200 OK) 1`] = `
+TaskResponse {
+  "description": "Test Description",
+  "id": 1,
+  "title": "Test Task",
+}
+`;
+
+exports[`Task controller given tasks in the system when listing tasks should list all tasks (200 OK) 1`] = `
 [
   TaskResponse {
     "description": "Test Description",
@@ -24,12 +32,4 @@ exports[`A Task controller should get all tasks 1`] = `
     "title": "Test Task",
   },
 ]
-`;
-
-exports[`A Task controller should update a task 1`] = `
-TaskResponse {
-  "description": "Test Description",
-  "id": 1,
-  "title": "Test Task",
-}
 `;

@@ -4,7 +4,7 @@ import { createTaskMock } from '../../domain/task.mock';
 import { TaskRepository } from '../ports/task.repository';
 import { DeleteTaskUseCase } from './delete-task.use-case';
 
-describe('The DeleteTask use case', () => {
+describe('DeleteTask use case', () => {
   const repository = mock<TaskRepository>();
   const useCase = new DeleteTaskUseCase(repository);
 
@@ -12,11 +12,15 @@ describe('The DeleteTask use case', () => {
     mockReset(repository);
   });
 
-  it('should delete a task', async () => {
-    const task = createTaskMock();
+  describe('given an existing task', () => {
+    describe('when deleting a task', () => {
+      it('should remove the task', async () => {
+        const task = createTaskMock();
 
-    await useCase.execute(task.id);
+        await useCase.execute(task.id);
 
-    expect(repository.deleteTask).toHaveBeenCalledWith(task.id);
+        expect(repository.deleteTask).toHaveBeenCalledWith(task.id);
+      });
+    });
   });
 });

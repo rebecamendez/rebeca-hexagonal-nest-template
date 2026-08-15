@@ -11,7 +11,7 @@ import { UpdateTaskUseCase } from '../application/use-cases/update-task.use-case
 import { createTaskMock } from '../domain/task.mock';
 import { TaskController } from './task.controller';
 
-describe('A Task controller', () => {
+describe('Task controller', () => {
   const getTasksUseCase = mock<GetTasksUseCase>();
   const getTaskUseCase = mock<GetTaskUseCase>();
   const createTaskUseCase = mock<CreateTaskUseCase>();
@@ -27,50 +27,70 @@ describe('A Task controller', () => {
     mockReset(deleteTaskUseCase);
   });
 
-  it('should get all tasks', async () => {
-    const tasks = [createTaskMock()];
+  describe('given tasks in the system', () => {
+    describe('when listing tasks', () => {
+      it('should list all tasks (200 OK)', async () => {
+        const tasks = [createTaskMock()];
 
-    getTasksUseCase.execute.calledWith().mockResolvedValue(tasks);
+        getTasksUseCase.execute.calledWith().mockResolvedValue(tasks);
 
-    const result = await controller.getTasks();
-    expect(result).toMatchSnapshot();
+        const result = await controller.getTasks();
+        expect(result).toMatchSnapshot();
+      });
+    });
   });
 
-  it('should get a task by id', async () => {
-    const task = createTaskMock();
+  describe('given an existing task', () => {
+    describe('when viewing a task', () => {
+      it('should return the task (200 OK)', async () => {
+        const task = createTaskMock();
 
-    getTaskUseCase.execute.calledWith(task.id).mockResolvedValue(task);
+        getTaskUseCase.execute.calledWith(task.id).mockResolvedValue(task);
 
-    const result = await controller.getTask(task.id);
-    expect(result).toMatchSnapshot();
+        const result = await controller.getTask(task.id);
+        expect(result).toMatchSnapshot();
+      });
+    });
   });
 
-  it('should create a task', async () => {
-    const request = createTaskRequestMock();
-    const task = createTaskMock();
+  describe('given a task to create', () => {
+    describe('when creating a task', () => {
+      it('should create the task (201 Created)', async () => {
+        const request = createTaskRequestMock();
+        const task = createTaskMock();
 
-    createTaskUseCase.execute.calledWith(new CreateTaskCommand(request.title, request.description)).mockResolvedValue(task);
+        createTaskUseCase.execute.calledWith(new CreateTaskCommand(request.title, request.description)).mockResolvedValue(task);
 
-    const result = await controller.createTask(request);
-    expect(result).toMatchSnapshot();
+        const result = await controller.createTask(request);
+        expect(result).toMatchSnapshot();
+      });
+    });
   });
 
-  it('should update a task', async () => {
-    const request = createTaskRequestMock();
-    const task = createTaskMock();
+  describe('given an existing task', () => {
+    describe('when updating a task', () => {
+      it('should update the task (200 OK)', async () => {
+        const request = createTaskRequestMock();
+        const task = createTaskMock();
 
-    updateTaskUseCase.execute
-      .calledWith(new UpdateTaskCommand(task.id, request.title, request.description))
-      .mockResolvedValue(task);
+        updateTaskUseCase.execute
+          .calledWith(new UpdateTaskCommand(task.id, request.title, request.description))
+          .mockResolvedValue(task);
 
-    const result = await controller.updateTask(task.id, request);
-    expect(result).toMatchSnapshot();
+        const result = await controller.updateTask(task.id, request);
+        expect(result).toMatchSnapshot();
+      });
+    });
   });
 
-  it('should delete a task', async () => {
-    const task = createTaskMock();
+  describe('given an existing task', () => {
+    describe('when deleting a task', () => {
+      it('should remove the task (200 OK)', async () => {
+        const task = createTaskMock();
 
-    await controller.deleteTask(task.id);
-    expect(deleteTaskUseCase.execute).toHaveBeenCalledWith(task.id);
+        await controller.deleteTask(task.id);
+        expect(deleteTaskUseCase.execute).toHaveBeenCalledWith(task.id);
+      });
+    });
   });
 });

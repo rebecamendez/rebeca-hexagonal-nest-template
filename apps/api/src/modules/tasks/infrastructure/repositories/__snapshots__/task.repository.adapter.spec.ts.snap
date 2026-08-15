@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`An task repository when creating a task should create a task 1`] = `
+exports[`Task repository given a task to create when creating a task should create a task 1`] = `
 Task {
   "description": "description created",
   "id": 2,
@@ -8,7 +8,7 @@ Task {
 }
 `;
 
-exports[`An task repository when getting a task by id should return the task 1`] = `
+exports[`Task repository given an existing task when getting a task by id should return the task 1`] = `
 Task {
   "description": "description",
   "id": 1,
@@ -16,7 +16,15 @@ Task {
 }
 `;
 
-exports[`An task repository when getting tasks should return all tasks 1`] = `
+exports[`Task repository given an existing task when updating a task should update a task 1`] = `
+Task {
+  "description": "description updated",
+  "id": 1,
+  "title": "title updated",
+}
+`;
+
+exports[`Task repository given tasks in the database when getting tasks should return all tasks 1`] = `
 [
   Task {
     "description": "description",
@@ -24,12 +32,4 @@ exports[`An task repository when getting tasks should return all tasks 1`] = `
     "title": "title",
   },
 ]
-`;
-
-exports[`An task repository when updating a task should update a task 1`] = `
-Task {
-  "description": "description updated",
-  "id": 1,
-  "title": "title updated",
-}
 `;
