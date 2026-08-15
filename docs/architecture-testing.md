@@ -44,7 +44,7 @@ Jest is split into three targets in `apps/api/`:
 | `pnpm test:unit`       | `jest.config.unit.js`       | `*.spec.ts`, ignoring repository and e2e specs |
 | `pnpm test:repository` | `jest.config.repository.js` | `*.repository.adapter.spec.ts` only            |
 | `pnpm test:e2e`        | `jest.config.e2e.js`        | `*.e2e.spec.ts` only                           |
-| `pnpm test`            | `jest.config.js`            | Everything                                     |
+| `pnpm test`            | the three targets above     | Everything, sequentially                       |
 
 All configs extend `jest.config.js`, which uses `ts-jest`, collects coverage, and ignores mocks, migrations, and the tests folder itself. Run these commands from `apps/api/`.
 

@@ -23,7 +23,7 @@
     "start:prod": "node dist/main",
     "start": "nest start",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test": "jest --coverage --forceExit --silent --logHeapUsage --detectOpenHandles",
+    "test": "pnpm test:unit && pnpm test:repository && pnpm test:e2e",
     "test:unit": "jest --config jest.config.unit.js --coverage --forceExit --silent --logHeapUsage --detectOpenHandles",
     "test:repository": "jest --config jest.config.repository.js --coverage --forceExit --silent --logHeapUsage --detectOpenHandles",
     "test:e2e": "jest --config jest.config.e2e.js --coverage --forceExit --silent --logHeapUsage --detectOpenHandles",
