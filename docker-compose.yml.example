@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: rebeca-hexagonal-nest-template
       POSTGRES_DB: rebeca-hexagonal-nest-template
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U rebeca-hexagonal-nest-template" ]
       interval: 5s
