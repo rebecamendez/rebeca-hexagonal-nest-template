@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { Task } from '../domain/task';
-import { TASK_REPOSITORY } from '../infrastructure/repositories/task.repository.provider';
-import type { TaskRepository } from './ports/task.repository';
+import { TASK_REPOSITORY, type TaskRepository } from './ports/task.repository';
 
 @Injectable()
 export class TaskService {
