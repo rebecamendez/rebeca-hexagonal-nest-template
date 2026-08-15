@@ -1,6 +1,6 @@
 # Tasks Module
 
-The tasks module is the reference feature module of the template. It implements task management with full CRUD and shows the canonical hexagonal layout.
+The tasks module is the reference feature module of the template. It manages tasks with full CRUD: list them, get one by id, create, update, and delete. It is deliberately simple so it shows the canonical way to structure a feature module.
 
 ## Use-Cases
 
@@ -12,31 +12,43 @@ The tasks module is the reference feature module of the template. It implements 
 | Update a task | `PUT /tasks/:id` | Replaces the title and description of a task. |
 | Delete a task | `DELETE /tasks/:id` | Removes a task. |
 
+All five use cases are simple CRUD with no business rules: a request comes in, the controller validates it, the matching use case orchestrates through the repository port, and the result is mapped back to a response.
+
+## Use-Case in Detail: Create a Task
+
+`POST /tasks` receives a `TaskRequest` body with `title` and `description`. The request crosses every layer exactly once:
+
+```mermaid
+sequenceDiagram
+  participant Client as HTTP client
+  participant Controller as TaskController
+  participant UseCase as CreateTaskUseCase
+  participant Port as TaskRepository (port)
+  participant Adapter as TaskRepositoryAdapter
+  participant DB as PostgreSQL
+
+  Client->>Controller: POST /tasks (TaskRequest)
+  Controller->>UseCase: execute(new CreateTaskCommand(title, description))
+  UseCase->>Port: createTask(title, description)
+  Port->>Adapter: createTask(title, description)
+  Adapter->>DB: INSERT INTO tasks
+  DB-->>Adapter: TaskEntity
+  Adapter-->>Port: Task (domain)
+  Port-->>UseCase: Task
+  UseCase-->>Controller: Task
+  Controller-->>Client: 201 TaskResponse
+```
+
+The remaining use cases follow the same simple flow. If any of them grows complex enough to deserve its own walkthrough, its sequence diagram and explanation go here, next to this one.
+
 ## Layout
 
 ```
 tasks/
   ├── domain/          # Task entity, framework-free
-  ├── application/     # TaskService and the TaskRepository port
+  ├── application/     # Use cases, commands, and the TaskRepository port
   ├── infrastructure/  # TypeORM adapter and providers
   └── presentation/    # TaskController and mappers
 ```
 
-## Boundaries
-
-- `domain/task.ts`: the `Task` model with `id`, `title`, and `description`. No NestJS or TypeORM imports.
-- `application/ports/task.repository.ts`: the `TaskRepository` interface and its DI token `TASK_REPOSITORY`, both owned by the application layer.
-- `application/task.service.ts`: orchestrates the use-cases through the port.
-- `infrastructure/repositories/task.repository.adapter.ts`: implements the port with TypeORM and maps entities through `TaskEntityMapper`.
-- `infrastructure/repositories/task.repository.provider.ts`: binds the port to the adapter for dependency injection.
-- `presentation/task.controller.ts`: maps contract DTOs (`TaskRequest`, `TaskResponse`) to and from the service.
-
-The golden sample in [architecture-code.md](../../architecture-code.md) walks through this layout step by step. The boundary rules live in [rules/aip-repo-architecture.md](../../../rules/aip-repo-architecture.md).
-
-## Testing
-
-- Unit tests: controller mocks the service, service mocks the repository port.
-- Repository tests: the adapter runs against PostgreSQL through TestContainers.
-- E2E tests: complete request/response cycles.
-
-See [architecture-testing.md](../../architecture-testing.md) for the strategy and test data builders.
+For the technical walkthrough through each layer, see [architecture-code.md](../../architecture-code.md). The decision to model operations as use cases is recorded in [ADR-0004](../../adrs/0004-application-use-cases.md).

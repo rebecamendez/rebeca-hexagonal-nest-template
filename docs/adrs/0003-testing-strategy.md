@@ -16,8 +16,8 @@ Use a layered testing approach with TestContainers for isolated database environ
 
 Required for every layer. Each layer mocks the layer below it:
 
-- Presentation (controllers) mocks services.
-- Application (services) mocks repository ports.
+- Presentation (controllers) mocks use cases.
+- Application (use cases) mocks repository ports.
 
 ### Repository Tests
 
