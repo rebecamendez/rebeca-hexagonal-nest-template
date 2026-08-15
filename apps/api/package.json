@@ -58,6 +58,7 @@
     "@types/node": "26.2.0",
     "@types/supertest": "7.2.1",
     "jest": "30.4.2",
+    "jest-html-reporter": "4.3.0",
     "jest-mock-extended": "4.0.0-beta1",
     "source-map-support": "0.5.21",
     "supertest": "7.2.2",
