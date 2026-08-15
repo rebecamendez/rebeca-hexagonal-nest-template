@@ -13,6 +13,8 @@
     "deps:update": "pnpm update --latest --recursive",
     "dev:init": "turbo dev:init --filter=api",
     "dev": "turbo dev",
+    "diagrams": "likec4 start docs/architecture-diagrams",
+    "diagrams:build": "likec4 build docs/architecture-diagrams",
     "docker:init": "cp docker-compose.yml.example docker-compose.yml",
     "docker:start": "docker compose up -d",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -23,6 +25,7 @@
   "devDependencies": {
     "@rebeca-hexagonal-nest-template/lint-config": "workspace:*",
     "husky": "9.1.7",
+    "likec4": "1.59.2",
     "lint-staged": "16.2.6",
     "prettier": "3.6.2",
     "turbo": "2.6.1"
