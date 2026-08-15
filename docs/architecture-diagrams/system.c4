@@ -1,0 +1,35 @@
+model {
+  actor "API Consumer" as consumer {
+    description "Frontend or external client"
+  }
+
+  system "API (NestJS)" as api {
+    container "Tasks API" as tasks_api {
+      component "Tasks Module" as tasks_module {
+        description "Domain, application, infrastructure, and presentation layers"
+        technology "TypeScript"
+      }
+    }
+  }
+
+  system "PostgreSQL" as db {
+    description "Persistent store"
+  }
+
+  system "api-contract" as contract {
+    description "Shared request and response DTOs"
+    technology "TypeScript"
+  }
+
+  consumer -> tasks_api {
+    label "HTTP /api"
+  }
+
+  tasks_api -> db {
+    label "TypeORM"
+  }
+
+  consumer -> contract {
+    label "DTOs"
+  }
+}

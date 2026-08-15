@@ -1,21 +1,26 @@
 ## 🧐 Context
 
 > [!NOTE]
-> Related links:
->
-> - Ticket: KAN-XXX
+> Ticket: <issue link>
 
-Briefly describe what you've done in this PR. 
+State concisely and elegantly in a couple of sentences what this change does and why.
 
-## 🤙 How to test? 
+## 🤙 How to test
 
-Steps to manually test the changes
+1. First step.
+2. Expected result.
 
-## 🚨 Watch out (optional)
+## 🚨 Watch out
 
-> [!WARNING]
-> New environment variables? Other breaking changes? ...
+Env vars, breaking changes, migrations. None is fine.
 
-## 📝 Details (optional)
+## 📝 Details
 
-Explain the changes in detail and add diagrams if needed
+Deep-dive or diagram (mermaid flow/sequence) when the flow has more than 3 steps.
+
+## 🛠️ Tooling
+
+> Model: `<provider/model, e.g. opencode/big-pickle>`
+> Version: `<cli or model version, e.g. opencode 0.1.x>`
+
+Only when the change was produced with AI assistance. This PR itself is proof of practice.

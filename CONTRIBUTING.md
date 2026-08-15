@@ -1,42 +1,42 @@
-# Contributing to rebeca-hexagonal-nest-template
+# Contributing
 
-Thank you for your interest in contributing to this template! This document provides guidelines and steps for contributing.
+Thanks for contributing to this template. The workflow follows the rules in [rules/index.md](rules/index.md).
 
-## 🎯 Development Process
+## Branching
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- Branch off `main` with a conventional prefix: `feat/...`, `fix/...`, `docs/...`, `chore/...`, `refactor/...`.
+- Keep branches short-lived and delete them after the pull request is merged.
 
-## 📝 Code Style
+## Commits
 
-- Follow TypeScript best practices
-- Use meaningful variable and function names
-- Keep functions small and focused
-- Write self-documenting code
-- Follow hexagonal architecture principles
-- Add tests for new features
+- Use Conventional Commits: `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`.
+- Make atomic commits: one responsibility per commit.
+- Add a scope when it adds context, for example `feat(api): add task search`.
 
-## 🧪 Testing
+## Development Workflow
 
-- Write unit tests for all new features
-- Ensure all tests pass before submitting PR
-- Follow TDD when possible
+1. Create a branch: `git checkout -b feat/your-change`
+2. Make your change in small, tested increments.
+3. Run the checks before pushing:
+   ```bash
+   pnpm lint
+   pnpm test
+   pnpm build
+   ```
+4. Rebase on `main` (`git pull --ff-only`) before opening the pull request.
+5. Open a pull request and fill in the template in [.github/pull_request_template.md](.github/pull_request_template.md).
 
-## 📚 Documentation
+## Code Conventions
 
-- Update README.md if needed
-- Document any new architecture decisions in ADRs
-- Add JSDoc comments for public APIs
+- Follow [rules/aip-repo-code-style.md](rules/aip-repo-code-style.md) for language, imports, and formatting.
+- Follow [rules/aip-repo-architecture.md](rules/aip-repo-architecture.md) for module boundaries and contracts.
+- Add tests following [rules/aip-repo-testing.md](rules/aip-repo-testing.md).
 
-## 🔍 Pull Request Process
+## Documentation
 
-1. Update the README.md with details of changes if needed
-2. Update the CHANGELOG.md with a note describing your changes
-3. The PR will be merged once you have the sign-off of at least one maintainer
+- Update the README only when the user-facing setup changes.
+- Record architectural decisions as ADRs in [docs/adrs/index.md](docs/adrs/index.md) using the [template](docs/adrs/template.md).
 
-## 📄 License
+## License
 
-By contributing, you agree that your contributions will be licensed under the project's license. 
+By contributing, you agree that your contributions are licensed under the project's MIT license.

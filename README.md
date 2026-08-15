@@ -1,131 +1,80 @@
-# 🎯 rebeca-hexagonal-nest-template
+# rebeca-hexagonal-nest-template
 
-> [!NOTE]
-> This is a template repository that evolved from a personal project. It provides a foundation for building scalable applications using NestJS and Hexagonal Architecture. Feel free to use this template as a starting point for your own projects!
+A template for building scalable applications with NestJS and hexagonal architecture. It is a modular monolith with clear layers, shared API contracts, and a testing strategy that keeps each layer honest.
 
-A template for building scalable and maintainable applications using NestJS, TypeScript, and Hexagonal Architecture. This template evolved from a personal project and incorporates best practices for sustainable code development.
+> This is a template repository. It evolved from a personal project and is meant to be a starting point for your own products.
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
-rebeca-hexagonal-nest-template/
-├── 📦 packages/           # Shared packages
-│   └── 📝 api-contract/  # API contracts
-├── 🚀 apps/              # Applications
-│   └── 🔧 api/          # Backend (NestJS)
-├── ⚙️ .github/          # GitHub Actions
-└── 📜 scripts/          # Utility scripts
+├── apps/
+│   └── api/              # Backend (NestJS)
+├── packages/
+│   ├── api-contract/     # Shared request and response DTOs
+│   └── lint-config/      # Shared ESLint, Prettier, dependency-cruiser config
+├── scripts/              # Utility scripts
+├── rules/                # Project rules for agents
+└── docs/                 # Documentation map
 ```
 
-## 🎯 Purpose
+## What You Get
 
-This template provides a foundation for building applications with:
-- 🏗️ Hexagonal Architecture (Ports & Adapters)
-- 📦 Clean Code principles
-- 🔄 SOLID principles
-- 🧪 Test-driven development
-- 📝 Clear documentation practices
+- Hexagonal architecture with domain, application, infrastructure, and presentation layers per module.
+- TypeScript in strict mode, shared API contracts, and dependency injection wiring.
+- TestContainers for isolated, parallel database tests.
+- Automatic OpenAPI documentation.
 
-## 🚀 Quick Start
+## Quick Start
 
-From root repository folder
+From the repository root:
 
-1. Install dependencies:
 ```bash
-nvm use  # Uses version from .nvmrc
-npm install -g pnpm  # Install pnpm globally if not already installed
+nvm use              # Node version from .nvmrc
+npm install -g pnpm  # pnpm 8
 pnpm install
+pnpm docker:init     # docker-compose.yml from the example
+pnpm docker:start    # start PostgreSQL
+pnpm dev:init        # create .env and run migrations
+pnpm dev             # start the API
 ```
 
-### 🐳 Docker Setup
+The API runs at http://localhost:3000. OpenAPI docs are at http://localhost:3000/api when `ENABLE_OPENAPI=true`. A Bruno collection is available in `apps/api/bruno/`.
 
-1. Initialize Docker environment:
-```bash
-pnpm docker:init  # Copies docker-compose.yml.example to docker-compose.yml
-```
+## Available Scripts
 
-2. Start services:
-```bash
-pnpm docker:start
-```
+| Command | What it does |
+|---|---|
+| `pnpm dev` | Start the API in watch mode |
+| `pnpm build` | Build all packages and apps |
+| `pnpm test` | Run the test suite |
+| `pnpm lint` | Lint all projects |
+| `pnpm format` | Format code and docs |
+| `pnpm diagrams` | Serve the LikeC4 diagrams with live reload |
+| `pnpm diagrams:build` | Build a static version of the diagrams |
+| `pnpm deps:audit` | Audit dependencies |
+| `pnpm docker:start` | Start Docker services |
 
-### 🔧 API Setup
+## Documentation
 
-1. Initialize development environment:
-```bash
-pnpm dev:init  # Creates .env file and runs database migrations
-```
+Read the docs in this order:
 
-2. Start development server:
-```bash
-pnpm dev
-```
+1. [docs/onboarding.md](docs/onboarding.md): how to get set up and productive.
+2. ⭐ [docs/architecture-system.md](docs/architecture-system.md): the big picture.
+3. ⭐ [docs/architecture-code.md](docs/architecture-code.md): module boundaries and golden samples.
+4. ⭐ [docs/architecture-testing.md](docs/architecture-testing.md): testing strategy by layer.
+5. [docs/index.md](docs/index.md): map of the whole documentation folder.
+6. [docs/context/domain.md](docs/context/domain.md): what the template does and who uses it.
+7. [docs/context/modules.md](docs/context/modules.md): the app, shared modules, packages, and per-module deep dives.
+8. [docs/adrs/index.md](docs/adrs/index.md): recorded architectural decisions.
 
-📚 API documentation available at http://localhost:3000/api/  
-📁 Bruno collection available in `apps/api/bruno/`
+## Rules for Agents
 
-## 📚 Documentation
+Agents and AI tools must start at [rules/index.md](rules/index.md), the single gateway to the global, scoped, and project rules. The global and scoped rules come from the [ai-principles](https://github.com/rebecamendez/ai-principles) repository.
 
-### Architecture Decisions
-We document architectural decisions using Architecture Decision Records (ADRs). Each ADR includes:
-- Problem context and statement
-- Decision rationale
-- Consequences and trade-offs
-- Implementation details
+## Contributing
 
-See our [ADR Index](doc/adr/index.md) for a complete list of architectural decisions.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and [rules/aip-repo-code-style.md](rules/aip-repo-code-style.md) for code conventions.
 
-## 🛠️ Development
+## License
 
-### Tech Stack
-- Node.js (version in `.nvmrc`)
-- PNPM package manager
-- TypeScript with strict mode
-- NestJS backend framework
-- PostgreSQL database
-
-### Development Guidelines
-- Follow TypeScript best practices
-- Maintain strict type safety
-- Write meaningful logs
-- Keep code clean and documented
-- Follow hexagonal architecture principles
-
-## 🎮 Available Scripts
-
-### Development Scripts
-- `pnpm dev` 🚀 - Development server
-- `pnpm build` 🏗️ - Project build
-- `pnpm test` 🧪 - Test suite
-- `pnpm lint` 🔍 - Code linting
-- `pnpm format` ✨ - Code formatting
-
-### Docker Scripts
-- `pnpm docker:init` 🐳 - Docker environment setup
-- `pnpm docker:start` 🚀 - Docker services
-
-> 💡 See package-specific READMEs for additional scripts
-
-## 👷‍♀️ TODO
-- Doppler support
-- Dockerfile for API
-- Structurizr Doc
-- Sample Domain Diagram
-- Improve dependency-cruiser rules
-- Feature flags support
-- Instrumentation support
-- Monitoring support (Datadog / New Relic)
-- Deploy support 
-- ...
-
-## 📄 License
-
-This project is licensed under the MIT License. This means:
-
-- ✅ You can use, modify, and distribute the code
-- ✅ You can use it for commercial purposes
-- ✅ You can create derivative works
-- ✅ You can use it privately
-- ✅ You only need to include the original copyright and license notice
-
-See [LICENSE](LICENSE) for full details.
+MIT. See [LICENSE](LICENSE).
