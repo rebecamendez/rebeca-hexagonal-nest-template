@@ -7,7 +7,7 @@ export interface ContainerSetup {
 }
 
 const createPostgresContainer = async (databaseName: string): Promise<StartedTestContainer> => {
-  return new GenericContainer('postgres')
+  return new GenericContainer('postgres:18-alpine')
     .withEnvironment({
       POSTGRES_USER: 'the-user',
       POSTGRES_PASSWORD: 'the-password',
@@ -23,7 +23,6 @@ const createDataSource = async (container: StartedTestContainer, databaseName: s
   const migrationsPath = __dirname + './../migrations/**/*{.ts,.js}';
 
   const dataSource = new DataSource({
-    name: databaseName,
     type: 'postgres',
     host: container.getHost(),
     port: container.getMappedPort(5432),
