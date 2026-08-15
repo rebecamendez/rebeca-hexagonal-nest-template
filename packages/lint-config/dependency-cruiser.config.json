@@ -23,6 +23,66 @@
         ]
       },
       "to": {}
+    },
+    {
+      "name": "no-application-to-infrastructure",
+      "comment": "Application depends on domain and ports only (dependency inversion)",
+      "severity": "error",
+      "from": {
+        "path": "(^|/)modules/.+/application(/|$)",
+        "pathNot": "\\.spec\\.ts$"
+      },
+      "to": {
+        "path": "(^|/)modules/.+/infrastructure(/|$)"
+      }
+    },
+    {
+      "name": "no-application-to-presentation",
+      "comment": "Application never reaches presentation",
+      "severity": "error",
+      "from": {
+        "path": "(^|/)modules/.+/application(/|$)",
+        "pathNot": "\\.spec\\.ts$"
+      },
+      "to": {
+        "path": "(^|/)modules/.+/presentation(/|$)"
+      }
+    },
+    {
+      "name": "no-domain-to-outer-layers",
+      "comment": "Domain stays pure: no application, infrastructure, or presentation",
+      "severity": "error",
+      "from": {
+        "path": "(^|/)modules/.+/domain(/|$)",
+        "pathNot": "\\.spec\\.ts$"
+      },
+      "to": {
+        "path": "(^|/)modules/.+/(application|infrastructure|presentation)(/|$)"
+      }
+    },
+    {
+      "name": "no-presentation-to-infrastructure",
+      "comment": "Presentation reaches application and domain, never infrastructure",
+      "severity": "error",
+      "from": {
+        "path": "(^|/)modules/.+/presentation(/|$)",
+        "pathNot": "\\.spec\\.ts$"
+      },
+      "to": {
+        "path": "(^|/)modules/.+/infrastructure(/|$)"
+      }
+    },
+    {
+      "name": "no-infrastructure-to-presentation",
+      "comment": "Infrastructure never reaches presentation",
+      "severity": "error",
+      "from": {
+        "path": "(^|/)modules/.+/infrastructure(/|$)",
+        "pathNot": "\\.spec\\.ts$"
+      },
+      "to": {
+        "path": "(^|/)modules/.+/presentation(/|$)"
+      }
     }
   ],
   "options": {

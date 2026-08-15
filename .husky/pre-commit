@@ -1,3 +1,9 @@
-#!/usr/bin/env sh
-echo "🔍 Running linting across all projects..."
+#!/usr/bin/env bash
+if [ -z "${BASH_VERSION:-}" ]; then
+  exec bash "$0" "$@"
+fi
+
+set -euo pipefail
+
+echo "Running linting across all projects..."
 pnpm turbo lint

@@ -3,7 +3,8 @@ import * as fs from 'fs';
 
 import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
-import { SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+
+type Schemas = NonNullable<OpenAPIObject['components']>['schemas'];
 
 function createSwaggerDocument(app: INestApplication): OpenAPIObject {
   const swaggerConfig = new DocumentBuilder()
@@ -19,7 +20,7 @@ function createSwaggerDocument(app: INestApplication): OpenAPIObject {
 
   // Merge api-contract with api swagger document
   const apiContractPath = require.resolve('@rebeca-hexagonal-nest-template/api-contract/openapi');
-  const apiContract = JSON.parse(fs.readFileSync(apiContractPath, 'utf-8')) as { schemas: Record<string, SchemaObject> };
+  const apiContract = JSON.parse(fs.readFileSync(apiContractPath, 'utf-8')) as { schemas: Schemas };
   document.components = { ...document.components, schemas: { ...document.components?.schemas, ...apiContract.schemas } };
 
   return document;

@@ -1,5 +1,7 @@
 import { Task } from '../../domain/task';
 
+export const TASK_REPOSITORY = 'TASK_REPOSITORY';
+
 export interface TaskRepository {
   getTasks(): Promise<Task[]>;
   getTask(id: number): Promise<Task>;
