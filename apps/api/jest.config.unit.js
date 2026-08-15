@@ -11,9 +11,9 @@ module.exports = {
         outputPath: './coverage/unit/html-report.html',
         pageTitle: 'Test report — unit tests',
         additionalInformation: [
-          { label: 'Tests', value: 'Presentation controllers and application use cases.' },
-          { label: 'Mocks', value: 'Use cases (in controllers) and repository ports (in use cases).' },
-          { label: 'Real', value: 'Nothing — pure logic and mocks only.' }
+          { label: '🧪 Tests', value: 'Presentation controllers and application use cases.' },
+          { label: '🎭 Mocks', value: 'Use cases (in controllers) and repository ports (in use cases).' },
+          { label: '✅ Real', value: 'Nothing — pure logic and mocks only.' }
         ]
       }
     ]

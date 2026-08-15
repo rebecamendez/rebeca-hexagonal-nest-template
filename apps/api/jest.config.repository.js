@@ -11,9 +11,9 @@ module.exports = {
         outputPath: './coverage/repository/html-report.html',
         pageTitle: 'Test report — repository tests',
         additionalInformation: [
-          { label: 'Tests', value: 'Repository adapters (TypeORM CRUD operations).' },
-          { label: 'Mocks', value: 'Nothing — the adapter runs against a real database.' },
-          { label: 'Real', value: 'PostgreSQL via TestContainers.' }
+          { label: '🧪 Tests', value: 'Repository adapters (TypeORM CRUD operations).' },
+          { label: '🎭 Mocks', value: 'Nothing — the adapter runs against a real database.' },
+          { label: '✅ Real', value: 'PostgreSQL via TestContainers.' }
         ]
       }
     ]

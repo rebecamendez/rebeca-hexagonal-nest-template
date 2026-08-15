@@ -13,9 +13,9 @@ module.exports = {
         outputPath: './coverage/all/html-report.html',
         pageTitle: 'Test report — all targets',
         additionalInformation: [
-          { label: 'Tests', value: 'The complete suite across every layer.' },
-          { label: 'Mocks', value: 'Per layer: controllers mock use cases, use cases mock repository ports.' },
-          { label: 'Real', value: 'Repository adapters run against PostgreSQL via TestContainers.' }
+          { label: '🧪 Tests', value: 'The complete suite across every layer.' },
+          { label: '🎭 Mocks', value: 'Per layer: controllers mock use cases, use cases mock repository ports.' },
+          { label: '✅ Real', value: 'Repository adapters run against PostgreSQL via TestContainers.' }
         ]
       }
     ]
