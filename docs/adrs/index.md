@@ -2,12 +2,13 @@
 
 A decision record captures an important architectural choice: the context, the decision, and its consequences. New decisions follow the [template](template.md).
 
-| Number | Title | Status |
-|---|---|---|
-| 0001 | [REST API Architecture](0001-rest-api-architecture.md) | Accepted |
-| 0002 | [Git Workflow](0002-git-workflow.md) | Accepted |
-| 0003 | [Testing Strategy](0003-testing-strategy.md) | Accepted |
-| 0004 | [Application Use Cases](0004-application-use-cases.md) | Proposed |
+| Number | Title                                                        | Status   |
+| ------ | ------------------------------------------------------------ | -------- |
+| 0001   | [REST API Architecture](0001-rest-api-architecture.md)       | Accepted |
+| 0002   | [Git Workflow](0002-git-workflow.md)                         | Accepted |
+| 0003   | [Testing Strategy](0003-testing-strategy.md)                 | Accepted |
+| 0004   | [Application Use Cases](0004-application-use-cases.md)       | Proposed |
+| 0005   | [BDD Test Naming Convention](0005-bdd-testing-convention.md) | Accepted |
 
 ## ADR Process
 

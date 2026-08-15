@@ -12,25 +12,26 @@ A quick map of every rule and when it applies. This is the only gateway to `rule
 
 Applied from the user-level rules directory, outside this repository.
 
-| Rule | What it covers |
-|---|---|
-| aip-global-git | Conventional Commits, branches, safe integration |
-| aip-global-documentation | README, ADRs, writing style |
+| Rule                     | What it covers                                   |
+| ------------------------ | ------------------------------------------------ |
+| aip-global-git           | Conventional Commits, branches, safe integration |
+| aip-global-documentation | README, ADRs, writing style                      |
 
 ## Scoped rules that apply here
 
-| Rule | Scope | What it covers |
-|---|---|---|
-| aip-scoped-typescript | typescript | strict TypeScript, explicit types |
-| aip-scoped-bash | bash | safe shell scripts (`set -euo pipefail`) |
+| Rule                  | Scope      | What it covers                           |
+| --------------------- | ---------- | ---------------------------------------- |
+| aip-scoped-typescript | typescript | strict TypeScript, explicit types        |
+| aip-scoped-bash       | bash       | safe shell scripts (`set -euo pipefail`) |
 
 ## Repo rules
 
-| Rule | What it covers |
-|---|---|
-| [aip-repo-code-style](aip-repo-code-style.md) | language, imports, monorepo conventions |
+| Rule                                              | What it covers                           |
+| ------------------------------------------------- | ---------------------------------------- |
+| [aip-repo-code-style](aip-repo-code-style.md)     | language, imports, monorepo conventions  |
 | [aip-repo-architecture](aip-repo-architecture.md) | hexagonal layers, shared contracts, ADRs |
-| [aip-repo-testing](aip-repo-testing.md) | testing strategy and requirements |
+| [aip-repo-testing](aip-repo-testing.md)           | testing strategy and requirements        |
+| [aip-repo-testing-bdd](aip-repo-testing-bdd.md)   | BDD naming convention for specs          |
 
 ## How to add a rule
 
