@@ -5,7 +5,7 @@ import { CreateTaskCommand } from '../commands/create-task.command';
 import { TaskRepository } from '../ports/task.repository';
 import { CreateTaskUseCase } from './create-task.use-case';
 
-describe('The CreateTask use case', () => {
+describe('CreateTask use case', () => {
   const repository = mock<TaskRepository>();
   const useCase = new CreateTaskUseCase(repository);
 
@@ -13,14 +13,18 @@ describe('The CreateTask use case', () => {
     mockReset(repository);
   });
 
-  it('should create a task', async () => {
-    const task = createTaskMock();
-    const command = new CreateTaskCommand(task.title, task.description);
+  describe('given a task to create', () => {
+    describe('when creating a task', () => {
+      it('should create the task', async () => {
+        const task = createTaskMock();
+        const command = new CreateTaskCommand(task.title, task.description);
 
-    repository.createTask.calledWith(task.title, task.description).mockResolvedValue(task);
+        repository.createTask.calledWith(task.title, task.description).mockResolvedValue(task);
 
-    const result = await useCase.execute(command);
+        const result = await useCase.execute(command);
 
-    expect(result).toEqual(task);
+        expect(result).toEqual(task);
+      });
+    });
   });
 });

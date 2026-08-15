@@ -8,7 +8,7 @@ Read [rules/index.md](rules/index.md) first. It is the only gateway to the rules
 
 - Global rules (git, documentation) apply always.
 - Scoped rules apply to TypeScript and to shell scripts.
-- Repo rules ([aip-repo-code-style](rules/aip-repo-code-style.md), [aip-repo-architecture](rules/aip-repo-architecture.md), [aip-repo-testing](rules/aip-repo-testing.md)) define this project's conventions.
+- Repo rules ([aip-repo-code-style](rules/aip-repo-code-style.md), [aip-repo-architecture](rules/aip-repo-architecture.md), [aip-repo-testing](rules/aip-repo-testing.md), [aip-repo-testing-bdd](rules/aip-repo-testing-bdd.md)) define this project's conventions.
 
 ## Documentation
 

@@ -2,14 +2,36 @@
 
 The testing strategy is a direct consequence of the [simple hexagonal architecture](architecture-code.md#hexagonal-architecture-ports-and-adapters): the core talks to the outside only through ports, so every layer can be tested against the layer below it by mocking those ports. Repository adapters run against a real database. The decision is recorded in [ADR-0003](adrs/0003-testing-strategy.md). The repo rules are in [rules/aip-repo-testing.md](../rules/aip-repo-testing.md).
 
+## Naming Convention (BDD)
+
+Every spec reads as a behavior sentence: "given X, when Y, should Z". Test names use business language, and presentation and e2e tests append the expected HTTP status between parentheses. The convention is recorded in [ADR-0005](adrs/0005-bdd-testing-convention.md) and enforced by [rules/aip-repo-testing-bdd.md](../rules/aip-repo-testing-bdd.md).
+
+- The outer `describe` names the subject under test: `describe('Task controller', ...)`. E2e specs use the endpoint instead: `describe('GET /tasks (e2e)', ...)`.
+- Each scenario's precondition goes in a `describe('given <context>', ...)` block.
+- Each scenario goes in a `describe('when <action>', ...)` block, even with a single test.
+- Each test is an `it('should <outcome>', ...)`, with the HTTP status when the layer talks HTTP.
+- Every test asserts behavior, not implementation: it goes through the public entry point (use case `execute()`, controller method, HTTP endpoint) and checks the observable outcome, never internals.
+
+```typescript
+describe("Task controller", () => {
+  describe("given an existing task", () => {
+    describe("when viewing a task", () => {
+      it("should return the task (200 OK)", async () => {
+        // ...
+      });
+    });
+  });
+});
+```
+
 ## Strategy by Layer
 
-| Layer | Test type | What it mocks | Tooling |
-|---|---|---|---|
-| Presentation | Unit | Use cases | Jest |
-| Application | Unit | Repository ports | Jest |
-| Infrastructure | Repository tests | Real database | Jest + TestContainers |
-| Full stack | E2E (optional) | Real stack | Jest + TestContainers |
+| Layer          | Test type        | What it mocks    | Tooling               |
+| -------------- | ---------------- | ---------------- | --------------------- |
+| Presentation   | Unit             | Use cases        | Jest                  |
+| Application    | Unit             | Repository ports | Jest                  |
+| Infrastructure | Repository tests | Real database    | Jest + TestContainers |
+| Full stack     | E2E (optional)   | Real stack       | Jest + TestContainers |
 
 A test never crosses more than one boundary: a controller test never touches a repository, a service test never touches the database, and a repository test only exercises the adapter.
 
@@ -17,12 +39,12 @@ A test never crosses more than one boundary: a controller test never touches a r
 
 Jest is split into three targets in `apps/api/`:
 
-| Command | Config | Runs |
-|---|---|---|
-| `pnpm test:unit` | `jest.config.unit.js` | `*.spec.ts`, ignoring repository and e2e specs |
-| `pnpm test:repository` | `jest.config.repository.js` | `*.repository.adapter.spec.ts` only |
-| `pnpm test:e2e` | `jest.config.e2e.js` | `*.e2e.spec.ts` only |
-| `pnpm test` | `jest.config.js` | Everything |
+| Command                | Config                      | Runs                                           |
+| ---------------------- | --------------------------- | ---------------------------------------------- |
+| `pnpm test:unit`       | `jest.config.unit.js`       | `*.spec.ts`, ignoring repository and e2e specs |
+| `pnpm test:repository` | `jest.config.repository.js` | `*.repository.adapter.spec.ts` only            |
+| `pnpm test:e2e`        | `jest.config.e2e.js`        | `*.e2e.spec.ts` only                           |
+| `pnpm test`            | `jest.config.js`            | Everything                                     |
 
 All configs extend `jest.config.js`, which uses `ts-jest`, collects coverage, and ignores mocks, migrations, and the tests folder itself. Run these commands from `apps/api/`.
 
@@ -35,7 +57,7 @@ Mocks and builders keep the specs deterministic.
 `createTaskMock()` builds a `Task` with sensible defaults and lets a spec override fields:
 
 ```typescript
-const task = createTaskMock({ title: 'Custom Title' });
+const task = createTaskMock({ title: "Custom Title" });
 ```
 
 ### Entity builders
@@ -44,7 +66,7 @@ const task = createTaskMock({ title: 'Custom Title' });
 
 ```typescript
 // apps/api/src/modules/tasks/infrastructure/repositories/task.repository.adapter.spec.ts
-await new TaskEntityBuilder().mock({ title: 'Custom Title' }).save(dataSource);
+await new TaskEntityBuilder().mock({ title: "Custom Title" }).save(dataSource);
 ```
 
 ## Case 1: Unit Test for a Use Case
@@ -56,15 +78,23 @@ A use case depends only on the port, so the spec mocks the port with `jest-mock-
 const repository = mock<TaskRepository>();
 const useCase = new CreateTaskUseCase(repository);
 
-it('should create a task', async () => {
-  const task = createTaskMock();
-  const command = new CreateTaskCommand(task.title, task.description);
+describe("CreateTask use case", () => {
+  describe("given a task to create", () => {
+    describe("when creating a task", () => {
+      it("should create the task", async () => {
+        const task = createTaskMock();
+        const command = new CreateTaskCommand(task.title, task.description);
 
-  repository.createTask.calledWith(task.title, task.description).mockResolvedValue(task);
+        repository.createTask
+          .calledWith(task.title, task.description)
+          .mockResolvedValue(task);
 
-  const result = await useCase.execute(command);
+        const result = await useCase.execute(command);
 
-  expect(result).toEqual(task);
+        expect(result).toEqual(task);
+      });
+    });
+  });
 });
 ```
 
@@ -93,14 +123,22 @@ const getTasksUseCase = mock<GetTasksUseCase>();
 const createTaskUseCase = mock<CreateTaskUseCase>();
 const controller = new TaskController(getTasksUseCase, createTaskUseCase);
 
-it('should create a task', async () => {
-  const request = createTaskRequestMock();
-  const task = createTaskMock();
+describe("Task controller", () => {
+  describe("given a task to create", () => {
+    describe("when creating a task", () => {
+      it("should create the task (201 Created)", async () => {
+        const request = createTaskRequestMock();
+        const task = createTaskMock();
 
-  createTaskUseCase.execute.calledWith(new CreateTaskCommand(request.title, request.description)).mockResolvedValue(task);
+        createTaskUseCase.execute
+          .calledWith(new CreateTaskCommand(request.title, request.description))
+          .mockResolvedValue(task);
 
-  const result = await controller.createTask(request);
-  expect(result).toMatchSnapshot();
+        const result = await controller.createTask(request);
+        expect(result).toMatchSnapshot();
+      });
+    });
+  });
 });
 ```
 
@@ -112,7 +150,9 @@ The adapter is tested against a real PostgreSQL instance in a container. `contai
 
 ```typescript
 // apps/api/src/tests/test-containers.setup.ts
-export const containerSetup = async (databaseName: string): Promise<ContainerSetup> => {
+export const containerSetup = async (
+  databaseName: string,
+): Promise<ContainerSetup> => {
   const container = await createPostgresContainer(databaseName);
   const dataSource = await createDataSource(container, databaseName);
   return { container, dataSource };
@@ -124,15 +164,17 @@ The spec starts the container once, prepares a row with the entity builder, and 
 ```typescript
 // apps/api/src/modules/tasks/infrastructure/repositories/task.repository.adapter.spec.ts
 beforeAll(async () => {
-  ({ container, dataSource } = await containerSetup('task-repository-test'));
+  ({ container, dataSource } = await containerSetup("task-repository-test"));
   repository = new TaskRepositoryAdapter(dataSource);
   await prepareScenario(dataSource); // seeds one TaskEntity via the builder
 });
 
-describe('when deleting a task', () => {
-  it('should delete a task', async () => {
+describe("when deleting a task", () => {
+  it("should delete a task", async () => {
     await repository.deleteTask(taskEntity.id);
-    await expect(repository.getTask(taskEntity.id)).rejects.toThrow(EntityModelNotFoundError);
+    await expect(repository.getTask(taskEntity.id)).rejects.toThrow(
+      EntityModelNotFoundError,
+    );
   });
 });
 ```
@@ -147,22 +189,22 @@ An e2e test boots the real `AppModule`, but points its `ConfigService` at the te
 // apps/api/src/modules/tasks/presentation/task.controller.e2e.spec.ts
 const mockedConfig = jest.fn((key: string) => {
   switch (key) {
-    case 'DB_HOST':
+    case "DB_HOST":
       return container.getHost();
-    case 'DB_PORT':
+    case "DB_PORT":
       return container.getMappedPort(5432);
-    case 'DB_USER':
-      return 'the-user';
-    case 'DB_PASSWORD':
-      return 'the-password';
-    case 'DB_DATABASE':
+    case "DB_USER":
+      return "the-user";
+    case "DB_PASSWORD":
+      return "the-password";
+    case "DB_DATABASE":
       return databaseName;
   }
   return process.env[key];
 });
 
 const moduleFixture: TestingModule = await Test.createTestingModule({
-  imports: [AppModule]
+  imports: [AppModule],
 })
   .overrideProvider(ConfigService)
   .useValue({ get: mockedConfig, getOrThrow: mockedConfig })
@@ -176,7 +218,7 @@ await app.init();
 Then the test makes a real HTTP call with `supertest`:
 
 ```typescript
-const response = await request(app.getHttpServer()).get('/tasks').send();
+const response = await request(app.getHttpServer()).get("/tasks").send();
 
 expect(response.status).toBe(200);
 expect(response.body).toMatchSnapshot();

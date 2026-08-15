@@ -5,7 +5,7 @@ import { UpdateTaskCommand } from '../commands/update-task.command';
 import { TaskRepository } from '../ports/task.repository';
 import { UpdateTaskUseCase } from './update-task.use-case';
 
-describe('The UpdateTask use case', () => {
+describe('UpdateTask use case', () => {
   const repository = mock<TaskRepository>();
   const useCase = new UpdateTaskUseCase(repository);
 
@@ -13,14 +13,18 @@ describe('The UpdateTask use case', () => {
     mockReset(repository);
   });
 
-  it('should update a task', async () => {
-    const task = createTaskMock();
-    const command = new UpdateTaskCommand(task.id, task.title, task.description);
+  describe('given an existing task', () => {
+    describe('when updating a task', () => {
+      it('should update the task', async () => {
+        const task = createTaskMock();
+        const command = new UpdateTaskCommand(task.id, task.title, task.description);
 
-    repository.updateTask.calledWith(task.id, task.title, task.description).mockResolvedValue(task);
+        repository.updateTask.calledWith(task.id, task.title, task.description).mockResolvedValue(task);
 
-    const result = await useCase.execute(command);
+        const result = await useCase.execute(command);
 
-    expect(result).toEqual(task);
+        expect(result).toEqual(task);
+      });
+    });
   });
 });
