@@ -6,6 +6,11 @@
   "author": "Rebeca Méndez Barallobre",
   "license": "MIT",
   "packageManager": "pnpm@8.15.4",
+  "pnpm": {
+    "overrides": {
+      "js-yaml": "5.2.2"
+    }
+  },
   "scripts": {
     "build": "turbo build",
     "clean": "turbo run clean && rm -rf node_modules .turbo dist tsconfig.tsbuildinfo",
@@ -28,6 +33,6 @@
     "likec4": "1.59.2",
     "lint-staged": "16.2.6",
     "prettier": "3.6.2",
-    "turbo": "2.6.1"
+    "turbo": "2.10.10"
   }
 }

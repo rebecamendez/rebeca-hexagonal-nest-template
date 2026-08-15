@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # 🔧 Setup
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Read versions
         id: versions
@@ -27,12 +27,13 @@ jobs:
           echo "pnpm_version=$(cat package.json | jq -r '.packageManager | split("@")[1]')" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ steps.versions.outputs.node_version }}
+          package-manager-cache: false
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v5
         with:
           version: ${{ steps.versions.outputs.pnpm_version }}
           run_install: false
@@ -40,7 +41,7 @@ jobs:
       # 📦 Dependencies & Cache
       - name: Restore main cache
         id: cache-deps
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             /home/runner/setup-pnpm/node_modules/.bin/store/v10
