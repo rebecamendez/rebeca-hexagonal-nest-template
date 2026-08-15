@@ -48,6 +48,8 @@ Jest is split into three targets in `apps/api/`:
 
 All configs extend `jest.config.js`, which uses `ts-jest`, collects coverage, and ignores mocks, migrations, and the tests folder itself. Run these commands from `apps/api/`.
 
+Coverage lands in `apps/api/coverage/`: `lcov.info`, `clover.xml`, and an HTML report in `coverage/lcov-report/index.html`, so a team member can open the report in a browser and inspect coverage by file.
+
 ## Test Data
 
 Mocks and builders keep the specs deterministic.

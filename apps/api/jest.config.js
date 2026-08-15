@@ -1,12 +1,7 @@
 module.exports = {
-  collectCoverageFrom: [
-    '**/*.ts',     
-    '!**/*.spec.ts',
-    '!**/*.mock.ts',
-    '!migrations/**/*',
-    '!tests/**/*'],
+  collectCoverageFrom: ['**/*.ts', '!**/*.spec.ts', '!**/*.mock.ts', '!migrations/**/*', '!tests/**/*'],
   coverageDirectory: '../coverage',
-  coverageReporters: ['lcov', 'text-summary', 'clover'],
+  coverageReporters: ['lcov', 'text-summary', 'clover', 'html'],
   moduleFileExtensions: ['ts', 'js'],
   modulePaths: ['<rootDir>'],
   preset: 'ts-jest',
@@ -15,5 +10,5 @@ module.exports = {
   testEnvironment: 'node',
   testRegex: '.*spec\\.ts$',
   testTimeout: 20000,
-  transform: {'^.+\\.ts': ['ts-jest']}
-}; 
+  transform: { '^.+\\.ts': ['ts-jest'] }
+};
